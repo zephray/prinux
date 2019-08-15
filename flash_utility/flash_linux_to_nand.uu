@@ -1,0 +1,42 @@
+uuu_version 1.3.34
+
+# This script allows you to flash the Linux OS into NAND Flash.
+
+# Boot into flash environment
+SDP: boot -f boot/u-boot-dtb.imx -nojump
+SDP: write -f boot/zImage -addr 0x80800000
+SDP: write -f boot/imx6ull-14x14-prime.dtb -addr 0x83000000
+SDP: write -f boot/fsl-image-mfgtool-initramfs-imx_mfgtools.cpio.gz.u-boot -addr 0x86800000
+SDP: jump -f boot/u-boot-dtb.imx -ivt
+
+# Flash uboot
+FBK: ucmd mount -t debugfs debugfs /sys/kernel/debug
+FBK: ucmd flash_erase /dev/mtd0 0 0
+FBK: ucp firmware/u-boot-dtb.imx t:/tmp
+FBK: ucmd kobs-ng init -x -v --chip_0_device_path=/dev/mtd0 /tmp/u-boot-dtb.imx
+
+# Flash kernel
+FBK: ucmd flash_erase /dev/mtd1 0 0
+FBK: ucp firmware/zImage t:/tmp
+FBK: ucmd nandwrite -p /dev/mtd1 /tmp/zImage
+
+# Flash device tree blob
+FBK: ucmd flash_erase /dev/mtd2 0 0
+FBK: ucp firmware/imx6ull-14x14-prime.dtb t:/tmp
+FBK: ucmd nandwrite -p /dev/mtd2 /tmp/imx6ull-14x14-prime.dtb
+
+# Flash rootfs
+FBK: ucmd flash_erase /dev/mtd4 0 0
+FBK: ucmd ubiformat /dev/mtd4
+FBK: ucmd ubiattach /dev/ubi_ctrl -m 4
+FBK: ucmd ubimkvol /dev/ubi0 -Nrootfs -m
+FBK: ucmd mkdir -p /mnt/mtd
+FBK: ucmd mount -t ubifs ubi0:rootfs /mnt/mtd
+FBK: acmd export EXTRACT_UNSAFE_SYMLINKS=1; tar -jx -C /mnt/mtd
+FBK: ucp firmware/rootfs.tar.bz2 t:-
+FBK: sync
+FBK: ucmd umount /mnt/mtd
+
+# Done
+FBK: done
+

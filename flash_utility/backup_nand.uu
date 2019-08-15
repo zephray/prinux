@@ -1,0 +1,55 @@
+uuu_version 1.3.34
+
+# This script allows you to backup the whole NAND flash including OOB data
+
+# Boot into flash environment
+SDP: boot -f boot/u-boot-dtb-nomtdpart.imx -nojump
+SDP: write -f boot/zImage -addr 0x80800000
+SDP: write -f boot/imx6ull-14x14-prime.dtb -addr 0x83000000
+SDP: write -f boot/fsl-image-mfgtool-initramfs-imx_mfgtools.cpio.gz.u-boot -addr 0x86800000
+SDP: jump -f boot/u-boot-dtb-nomtdpart.imx -ivt
+
+# Limited by the RAM size, backup 64MB at a time
+FBK: ucmd nanddump --bb=dumpbad --noecc --oob -f /tmp/0-64mb.bin -l 0x4000000 -s 0x0 /dev/mtd0
+FBK: ucmd gzip /tmp/0-64mb.bin
+FBK: ucp t:/tmp/0-16mb.bin.gz backup/
+FBK: ucmd rm /tmp/*.gz
+
+FBK: ucmd nanddump --bb=dumpbad --noecc --oob -f /tmp/64-128mb.bin -l 0x4000000 -s 0x4000000 /dev/mtd0
+FBK: ucmd gzip /tmp/64-128mb.bin
+FBK: ucp t:/tmp/64-128mb.bin.gz backup/
+FBK: ucmd rm /tmp/*.gz
+
+FBK: ucmd nanddump --bb=dumpbad --noecc --oob -f /tmp/128-192mb.bin -l 0x4000000 -s 0x8000000 /dev/mtd0
+FBK: ucmd gzip /tmp/128-192mb.bin
+FBK: ucp t:/tmp/128-192mb.bin.gz backup/
+FBK: ucmd rm /tmp/*.gz
+
+FBK: ucmd nanddump --bb=dumpbad --noecc --oob -f /tmp/192-256mb.bin -l 0x4000000 -s 0xc000000 /dev/mtd0
+FBK: ucmd gzip /tmp/192-256mb.bin
+FBK: ucp t:/tmp/192-256mb.bin.gz backup/
+FBK: ucmd rm /tmp/*.gz
+
+FBK: ucmd nanddump --bb=dumpbad --noecc --oob -f /tmp/256-320mb.bin -l 0x4000000 -s 0x10000000 /dev/mtd0
+FBK: ucmd gzip /tmp/256-320mb.bin
+FBK: ucp t:/tmp/256-320mb.bin.gz backup/
+FBK: ucmd rm /tmp/*.gz
+
+FBK: ucmd nanddump --bb=dumpbad --noecc --oob -f /tmp/320-384mb.bin -l 0x4000000 -s 0x14000000 /dev/mtd0
+FBK: ucmd gzip /tmp/320-384mb.bin
+FBK: ucp t:/tmp/320-384mb.bin.gz backup/
+FBK: ucmd rm /tmp/*.gz
+
+FBK: ucmd nanddump --bb=dumpbad --noecc --oob -f /tmp/384-448mb.bin -l 0x4000000 -s 0x18000000 /dev/mtd0
+FBK: ucmd gzip /tmp/384-448mb.bin
+FBK: ucp t:/tmp/384-448mb.bin.gz backup/
+FBK: ucmd rm /tmp/*.gz
+
+FBK: ucmd nanddump --bb=dumpbad --noecc --oob -f /tmp/448-512mb.bin -l 0x4000000 -s 0x1c000000 /dev/mtd0
+FBK: ucmd gzip /tmp/448-512mb.bin
+FBK: ucp t:/tmp/448-512mb.bin.gz backup/
+FBK: ucmd rm /tmp/*.gz
+
+# Done
+FBK: done
+

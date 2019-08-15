@@ -1,0 +1,10 @@
+uuu_version 1.3.34
+
+# This script allows you to run the Linux OS in the RAM without altering the NAND Flash
+
+SDP: boot -f boot/u-boot-dtb.imx -nojump
+SDP: write -f firmware/zImage -addr 0x80800000
+SDP: write -f firmware/imx6ull-14x14-prime.dtb -addr 0x83000000
+SDP: write -f firmware/rootfs.cpio.uboot -addr 0x86800000
+SDP: jump -f boot/u-boot-dtb.imx -ivt
+SDP: done
