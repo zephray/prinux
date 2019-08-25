@@ -1,6 +1,6 @@
-uuu_version 1.3.34
+uuu_version 1.2.135
 
-# This script allows you to backup the whole NAND flash including OOB data
+# This script allows you to restore the whole NAND flash including OOB data
 
 # Boot into flash environment
 SDP: boot -f boot/u-boot-dtb-nomtdpart.imx -nojump
@@ -9,7 +9,7 @@ SDP: write -f boot/imx6ull-14x14-prime.dtb -addr 0x83000000
 SDP: write -f boot/fsl-image-mfgtool-initramfs-imx_mfgtools.cpio.gz.u-boot -addr 0x86800000
 SDP: jump -f boot/u-boot-dtb-nomtdpart.imx -ivt
 
-# Limited by the RAM size, backup 64MB at a time
+# Limited by the RAM size, restore 64MB at a time
 FBK: ucmd flash_erase /dev/mtd0 0 0
 
 FBK: ucp backup/0-64mb.bin.gz t:/tmp
