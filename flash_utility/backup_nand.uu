@@ -12,7 +12,7 @@ SDP: jump -f boot/u-boot-dtb-nomtdpart.imx -ivt
 # Limited by the RAM size, backup 64MB at a time
 FBK: ucmd nanddump --bb=dumpbad --noecc --oob -f /tmp/0-64mb.bin -l 0x4000000 -s 0x0 /dev/mtd0
 FBK: ucmd gzip /tmp/0-64mb.bin
-FBK: ucp t:/tmp/0-16mb.bin.gz backup/
+FBK: ucp t:/tmp/0-64mb.bin.gz backup/
 FBK: ucmd rm /tmp/*.gz
 
 FBK: ucmd nanddump --bb=dumpbad --noecc --oob -f /tmp/64-128mb.bin -l 0x4000000 -s 0x4000000 /dev/mtd0
