@@ -12,23 +12,19 @@ SDP: jump -f boot/u-boot-dtb-nomtdpart.imx -ivt
 # Limited by the RAM size, restore 64MB at a time
 FBK: ucmd flash_erase /dev/mtd0 0 0
 
-FBK: ucp backup/0-64mb.bin.gz t:/tmp
-FBK: ucmd gzip -d /tmp/0-64mb.bin.gz
+FBK: ucp backup/0-64mb.bin t:/tmp
 FBK: ucmd nandwrite --noecc --noskipbad --oob -s 0x0 /dev/mtd0 /tmp/0-64mb.bin
 FBK: ucmd rm /tmp/*
 
-FBK: ucp backup/64-128mb.bin.gz t:/tmp
-FBK: ucmd gzip -d /tmp/64-128mb.bin.gz
+FBK: ucp backup/64-128mb.bin t:/tmp
 FBK: ucmd nandwrite --noecc --noskipbad --oob -s 0x4000000 /dev/mtd0 /tmp/64-128mb.bin
 FBK: ucmd rm /tmp/*
 
-FBK: ucp backup/128-192mb.bin.gz t:/tmp
-FBK: ucmd gzip -d /tmp/128-192mb.bin.gz
+FBK: ucp backup/128-192mb.bin t:/tmp
 FBK: ucmd nandwrite --noecc --noskipbad --oob -s 0x8000000 /dev/mtd0 /tmp/128-192mb.bin
 FBK: ucmd rm /tmp/*
 
-FBK: ucp backup/192-256mb.bin.gz t:/tmp
-FBK: ucmd gzip -d /tmp/192-256mb.bin.gz
+FBK: ucp backup/192-256mb.bin t:/tmp
 FBK: ucmd nandwrite --noecc --noskipbad --oob -s 0xc000000 /dev/mtd0 /tmp/192-256mb.bin
 FBK: ucmd rm /tmp/*
 
